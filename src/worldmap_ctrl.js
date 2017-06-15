@@ -132,6 +132,8 @@ export default class WorldmapCtrl extends MetricsPanelCtrl {
     } else if (this.panel.locationData === 'table') {
       const tableData = dataList.map(DataFormatter.tableHandler.bind(this));
       this.dataFormatter.setTableValues(tableData, data);
+    } else if (this.panel.locationData === 'OpenNMS') {
+    	this.dataFormatter.setOpenNMSValues(dataList, data);
     } else {
       this.series = dataList.map(this.seriesHandler.bind(this));
       this.dataFormatter.setValues(data);
