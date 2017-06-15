@@ -109,7 +109,7 @@ export default class DataFormatter {
                   latvar=num;
                 } else if(dataList[x].target.includes("longitude")) {
                   lonvar=num;
-                } else if(dataList[x].target.includes("value"){ 
+                } else if(dataList[x].target.includes("value")){ 
                   valvar=num;
                 }
               }
