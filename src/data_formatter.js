@@ -104,7 +104,7 @@ export default class DataFormatter {
             if (datapoints && datapoints.length()!=0){
               dp = datapoints[datapoints.length()-1]; // last value in list
               var num = dp[0]; // dp[o] = value dp[1] = timestamp 
-              if (! isNaN(num) {
+              if (! isNaN(num) ){
                 if(dataList[x].target.includes("latitude")){
                   latvar=num;
                 } else if(dataList[x].target.includes("longitude")) {
