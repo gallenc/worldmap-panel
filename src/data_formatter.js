@@ -83,33 +83,45 @@ export default class DataFormatter {
   setOpenNMSValues(dataList, data) {
     if (dataList && dataList.length > 0) {
       
+      let highestValue = 0;
+      let lowestValue = Number.MAX_VALUE;
+      
       // find the datapoint names
       const dataNames = [];
-      for (var x = 0; x < dataList; x++){
+      for (var x = 0; x < dataList.length; x++){
         if(dataList[x].target){
           var pos = dataList[x].target.lastIndexOf(".latitude");
-          var name = dataList[x].target.substring(0, pos);
-          dataNames.push(name);
+          if (pos > 0 ) {
+            var name = dataList[x].target.substring(0, pos);
+            dataNames.push(name);
+          }
         }
       }
       // fill in the values for the datapoint names
-      for (var i = 0; x < dataNames; i++){
-        var latvar;
-        var lonvar;
-        var valvar;
-        for (var x = 0; x < dataList; x++){
-          if(dataList[x].target && dataList[x].target.includes(dataNames[i])){
-            var datapoints = dataList[x].datapoints;
-            var dp;
-            if (datapoints && datapoints.length()!=0){
-              dp = datapoints[datapoints.length()-1]; // last value in list
-              var num = dp[0]; // dp[o] = value dp[1] = timestamp 
+      for (var i = 0; i < dataNames.length; i++){
+        let latvar;
+        let lonvar;
+        let valvar;
+        for (let y = 0; y < dataList.length; y++){
+          if(dataList[y].target && dataList[y].target.includes(dataNames[i])){
+            let datapoints = dataList[y].datapoints;
+            let dp;
+            let num;
+            if (datapoints && datapoints.length!=0){
+              let z=datapoints.length-1;
+              // find last value in list which is a number
+              do {
+                dp = datapoints[z]; 
+                num = dp[0]; // dp[o] = value dp[1] = timestamp 
+                if (! isNaN(num) ) break;
+                z--;
+              } while (z>0);
               if (! isNaN(num) ){
-                if(dataList[x].target.includes("latitude")){
+                if(dataList[y].target.includes("latitude")){
                   latvar=num;
-                } else if(dataList[x].target.includes("longitude")) {
+                } else if(dataList[y].target.includes("longitude")) {
                   lonvar=num;
-                } else if(dataList[x].target.includes("value")){ 
+                } else if(dataList[y].target.includes("value")){ 
                   valvar=num;
                 }
               }
@@ -126,12 +138,19 @@ export default class DataFormatter {
             valueFormatted: valvar,
             valueRounded: valvar
           };
+          
+          if (dataValue.value > highestValue) highestValue = dataValue.value;
+          if (dataValue.value < lowestValue) lowestValue = dataValue.value;
+
+          dataValue.valueRounded = this.kbn.roundValue(dataValue.value, this.ctrl.panel.decimals || 0);
+          
           data.push(dataValue);
         }
       }
-      data.highestValue = 0;
-      data.lowestValue = 0;
-      data.valueRange = 0;
+
+      data.highestValue = highestValue;
+      data.lowestValue = lowestValue;
+      data.valueRange = highestValue - lowestValue;
     } 
     
   }
