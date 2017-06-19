@@ -4,7 +4,7 @@ The Worldmap Panel is a tile map of the world that can be overlaid with circles 
 
 ![Worldmap](https://raw.githubusercontent.com/grafana/worldmap-panel/54f83cfdc7339fee02df00933422c35630677330/src/images/worldmap-world.png)
 
-There are currently two ways to connect data with points on a map. Either by matching a tag or series name to a country code/state code (e.g. SE for Sweden, TX for Texas) or by using geohashes to map against geographic coordinates.
+There are currently two ways to connect data with points on a map. Either by matching a tag or series name to a country code/state code (e.g. SE for Sweden, TX for Texas) or by using geographic coordinates. Geohashes geographic coordinates can be used with a number of data sources (elastic search, influxdb etc) while latitude and longitude data points can be used with data sources which don't support geohashes such as the OpenNMS data source.
 
 ## Time Series Data as the Data Source
 
@@ -92,6 +92,10 @@ Similar to the Elasticsearch query above, 3 fields are expected (2 of them are m
 
 ![Example influxdb query](https://cloud.githubusercontent.com/assets/434655/16535977/8cd520be-3fec-11e6-8dc9-2ecf7b16ad5f.png)
 
+## Latitude and Longitude data points as the Data Source (OpenNMS data source)
+
+The OpenNMS data source uses latitude and longitude instead of geohashes to define coordinates. For more information on using the openNMS data source see [OpenNMS_Datasource.md](../master/src/images/OpenNMS_Datasource.md)
+
 ### Map Visual Option Settings
 
 **Center**
@@ -122,13 +126,14 @@ Shows/hide the legend on the bottom left that shows the threshold ranges and the
 
 **Location Data**
 
-There are four ways to provide data for the worldmap panel:
+There are five ways to provide data for the worldmap panel:
  - *countries*: This is a list of all the countries in the world. It works by matching a country code (US, FR, AU) to a node alias in a time series query.
  - *states*: Similar to countries but for the states in USA e.g. CA for California
  - *geohash*: An ElasticSearch query that returns geohashes.
  - *json*: A json endpoint that returns custom json. Examples of the format are the [countries data used in first option](https://github.com/grafana/worldmap-panel/blob/master/src/data/countries.json) or [this list of cities](https://github.com/grafana/worldmap-panel/blob/master/src/data/probes.json).
  - *jsonp*: A jsonp endpoint that returns custom json wrapped as jsonp. Use this if you are having problems with CORS.
  - *table*: This expects the metric query to return data points with a field named geohash. This field should contain a string in the [geohash form](https://www.elastic.co/guide/en/elasticsearch/guide/current/geohashes.html). For example: London -> "gcpvh3zgu992".
+  - *OpenNMS*: This expects the metric query to return data points with fields named $node.latitude $node.longitude. See [OpenNMS_Datasource.md](../master/src/images/OpenNMS_Datasource.md)
 
 **Aggregation**
 
@@ -151,4 +156,4 @@ The threshold field also accepts 2 or more comma-separated values. For example, 
 
 ### CHANGELOG
 
-The latest changes can be found here: [CHANGELOG.md](https://github.com/grafana/worldmap-panel/blob/master/CHANGELOG.md)
+The latest changes can be found here: [CHANGELOG.md](../master/src/images/OpenNMS_Datasource.md)
