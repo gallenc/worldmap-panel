@@ -10,7 +10,7 @@ These coordinates can then be referenced by the world map panel.
 To drive the world map panel, three data points must be defined with labels corresponding to $node.latitude, $node.longitude and $node.value.
 Where $node is either the node id or foreignSource:foreignId of the node. 
 
-As with otehr data sources, the value is used to drive the colour and size of of the circle drawn at the coordinates. If a time range is given to the OpenNMS query, a time ordered set of coordinates and values will be returned. However the circle will be drawn using the latest received coordinates within the set which correspond to values which are not NaN (not a number). (We do not aggregate the received values because this can be done by OpenNMS itself within a data source expression query).
+As with other data sources, the value is used to drive the colour and size of of the circle drawn at the coordinates. If a time range is given to the OpenNMS query, a time ordered set of coordinates and values will be returned. However the circle will be drawn using the latest received coordinates within the set which correspond to values which are not NaN (not a number). (We do not aggregate the received values because this can be done by OpenNMS itself within a data source expression query).
 
 Alternatively if you are using templates, the template should define the $node name as illustrated in the following screenshots.
 
@@ -31,7 +31,10 @@ The following changes to the OpenNMS configuration will create a OnmsNodeLatLon 
 
 This following configuration changes give you a starting point to define an OnmsNodeLatLon service however to understand how the XML Collector works, and how to configure it, please also check the following link: http://www.opennms.org/wiki/XML_Collector 
 
-<opennms-home>/etc/collectd-configuration.xml
+(in the following $opennms-home is the location of OpenNMS installation e.g. /opt/opennms in centos)
+
+$opennms-home/etc/collectd-configuration.xml
+
 ```
     <package name="example1">
     ...
@@ -44,7 +47,7 @@ This following configuration changes give you a starting point to define an Onms
     <collector service="OnmsNodeLatLon" class-name="org.opennms.protocols.xml.collector.XmlCollector"/>
 
 ```
-<opennms-home>/etc/xml-datacollection-config.xml
+$opennms-home/etc/xml-datacollection-config.xml
 ```
 <xml-datacollection-config rrdRepository="/opt/opennms/share/rrd/snmp/" xmlns="http://xmlns.opennms.org/xsd/config/xml-datacollection">
 ....
@@ -65,7 +68,7 @@ This following configuration changes give you a starting point to define an Onms
   </xml-collection>
 </xml-datacollection-config>
 ```
-<opennms-home>/etc/xml-datacollection/xml-onms-node-latlon.xml
+$opennms-home/etc/xml-datacollection/xml-onms-node-latlon.xml
 
 ```
 <xml-groups>
@@ -74,6 +77,36 @@ This following configuration changes give you a starting point to define an Onms
     <xml-object name="longitude" type="GAUGE" xpath="longitude" />
   </xml-group>
 </xml-groups>
+```
+if you want to see an opennms graph of the latitude/longitude add the following graph definition
+$opennms-home/etc/snmp-graph.properties.d/onms-node-latlon.properties
+```
+reports=opennms.asset.latitude, \
+opennms.asset.longitude
+
+## latitude and longitude for OnmsNodeLatLon service
+## <xml-object name="latitude" type="GAUGE" xpath="latitude" />
+report.opennms.asset.latitude.name=latitude
+report.opennms.asset.latitude.columns=latitude
+report.opennms.asset.latitude.type=nodeSnmp
+report.opennms.asset.latitude.command=--title="latitude" \
+ DEF:v1={rrd1}:latitude:AVERAGE \
+ LINE2:v1#ff0000:"latitude" \
+ GPRINT:v1:AVERAGE:"    Avg\\: %8.2lf %s" \
+ GPRINT:v1:MIN:"Min\\: %8.2lf %s" \
+ GPRINT:v1:MAX:"Max\\: %8.2lf %s\\n"
+
+## <xml-object name="latitude" type="GAUGE" xpath="longitude" />
+report.opennms.asset.longitude.name=longitude
+report.opennms.asset.longitude.columns=longitude
+report.opennms.asset.longitude.type=nodeSnmp
+report.opennms.asset.longitude.command=--title="longitude" \
+ DEF:v1={rrd1}:longitude:AVERAGE \
+ LINE2:v1#ff0000:"longitude" \
+ GPRINT:v1:AVERAGE:"    Avg\\: %8.2lf %s" \
+ GPRINT:v1:MIN:"Min\\: %8.2lf %s" \
+ GPRINT:v1:MAX:"Max\\: %8.2lf %s\\n"
+
 ```
 
 
