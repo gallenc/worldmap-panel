@@ -78,7 +78,7 @@ $opennms-home/etc/xml-datacollection/xml-onms-node-latlon.xml
   </xml-group>
 </xml-groups>
 ```
-if you want to see an opennms graph of the latitude/longitude add the following graph definition
+If you want to see an opennms graph of the latitude/longitude add the following graph definition
 $opennms-home/etc/snmp-graph.properties.d/onms-node-latlon.properties
 ```
 reports=opennms.asset.latitude, \
