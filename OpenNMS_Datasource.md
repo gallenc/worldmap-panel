@@ -13,6 +13,7 @@ Where $node is either the node id or foreignSource:foreignId of the node.
 As with other data sources, the value is used to drive the colour and size of of the circle drawn at the coordinates. If a time range is given to the OpenNMS query, a time ordered set of coordinates and values will be returned. However the circle will be drawn using the latest received coordinates within the set which correspond to values which are not NaN (not a number). (We do not aggregate the received values because this can be done by OpenNMS itself within a data source expression query).
 
 Alternatively if you are using templates, the template should define the $node name as illustrated in the following screenshots.
+You need 3 variables with labels ; $node.latitude, $node.longitude, $node.value.
 
 ![Image](../master/src/images/worldMapOpenNMSDatasourceSettings.png)
 
