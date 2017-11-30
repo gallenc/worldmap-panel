@@ -73,3 +73,7 @@
 
 - Adds Country data with 3-letter country codes.
 
+## v.0.0.17 (OpenNMS Branch)
+
+- This branch adds the ability to display world maps from an OpenNMS data source.
+

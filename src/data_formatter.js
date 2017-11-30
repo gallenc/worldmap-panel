@@ -39,7 +39,6 @@ export default class DataFormatter {
           data.push(dataValue);
         }
       });
-
       data.highestValue = highestValue;
       data.lowestValue = lowestValue;
       data.valueRange = highestValue - lowestValue;
@@ -79,71 +78,70 @@ export default class DataFormatter {
       data.valueRange = highestValue - lowestValue;
     }
   }
-  
+
   setOpenNMSValues(dataList, data) {
     if (dataList && dataList.length > 0) {
-      
       let highestValue = 0;
       let lowestValue = Number.MAX_VALUE;
-      
+
       // find the datapoint names
       const dataNames = [];
-      for (var x = 0; x < dataList.length; x++){
-        if(dataList[x].target){
-          var pos = dataList[x].target.lastIndexOf(".latitude");
-          if (pos > 0 ) {
-            var name = dataList[x].target.substring(0, pos);
+      for (let _x = 0; _x < dataList.length; _x += 1) {
+        if (dataList[_x].target) {
+          const pos = dataList[_x].target.lastIndexOf('.latitude');
+          if (pos > 0) {
+            const name = dataList[_x].target.substring(0, pos);
             dataNames.push(name);
           }
         }
       }
       // fill in the values for the datapoint names
-      for (var i = 0; i < dataNames.length; i++){
+      for (let _i = 0; _i < dataNames.length; _i += 1) {
         let latvar;
         let lonvar;
         let valvar;
-        for (let y = 0; y < dataList.length; y++){
-          if(dataList[y].target && dataList[y].target.includes(dataNames[i])){
-            let datapoints = dataList[y].datapoints;
+        for (let _y = 0; _y < dataList.length; _y += 1) {
+          if (dataList[_y].target && dataList[_y].target.includes(dataNames[_i])) {
+            const datapoints = dataList[_y].datapoints;
             let dp;
             let num;
-            if (datapoints && datapoints.length!=0){
-              let z=datapoints.length-1;
+            if (datapoints && datapoints.length !== 0) {
+              let _z = datapoints.length - 1;
               // find last value in list which is a number
               do {
-                dp = datapoints[z]; 
-                num = dp[0]; // dp[o] = value dp[1] = timestamp 
-                if (! isNaN(num) ) break;
-                z--;
-              } while (z>0);
-              if (! isNaN(num) ){
-                if(dataList[y].target.includes("latitude")){
-                  latvar=num;
-                } else if(dataList[y].target.includes("longitude")) {
-                  lonvar=num;
-                } else if(dataList[y].target.includes("value")){ 
-                  valvar=num;
+                dp = datapoints[_z];
+                num = dp[0]; // dp[o] = value dp[1] = timestamp
+                if (!isNaN(num)) break;
+                _z -= 1;
+              } while (_z > 0);
+              if (!isNaN(num)) {
+                if (dataList[_y].target.includes('latitude')) {
+                  latvar = num;
+                } else if (dataList[_y].target.includes('longitude')) {
+                  lonvar = num;
+                } else if (dataList[_y].target.includes('value')) {
+                  valvar = num;
                 }
               }
             }
           }
         }
-        if(latvar && lonvar && valvar) { // if we have all 3 numbers create a datapoint
+        if (latvar && lonvar && valvar) { // if we have all 3 numbers create a datapoint
           const dataValue = {
-            key: dataNames[i],
-            locationName: dataNames[i],
+            key: dataNames[_i],
+            locationName: dataNames[_i],
             locationLatitude: latvar,
             locationLongitude: lonvar,
             value: valvar,
             valueFormatted: valvar,
             valueRounded: valvar
           };
-          
+
           if (dataValue.value > highestValue) highestValue = dataValue.value;
           if (dataValue.value < lowestValue) lowestValue = dataValue.value;
 
           dataValue.valueRounded = this.kbn.roundValue(dataValue.value, this.ctrl.panel.decimals || 0);
-          
+
           data.push(dataValue);
         }
       }
@@ -151,11 +149,9 @@ export default class DataFormatter {
       data.highestValue = highestValue;
       data.lowestValue = lowestValue;
       data.valueRange = highestValue - lowestValue;
-    } 
-    
+    }
   }
 
-  
   static tableHandler(tableData) {
     const datapoints = [];
 
